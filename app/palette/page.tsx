@@ -17,12 +17,11 @@ const Palette = () => {
   const {
     primary,
     neutral,
-    accentIndex,
-    setAccentIndex,
+    selectedAccent,
     selected,
     setSelectedColor,
-    addAccent,
-    currentAccents
+    addNewAccent,
+    accents,
   } = useColorContext();
   var hsl = require("hsl-to-hex");
 
@@ -37,11 +36,7 @@ const Palette = () => {
             onClick={() => setSelectedColor(SelectedColor.Primary)}
           >
             <Swatch
-              hex={hsl(
-                primary.hue,
-                primary.saturation,
-                primary.luminance
-              )}
+              hex={hsl(primary.hue, primary.saturation, primary.luminance)}
             />
           </div>
           <div
@@ -51,24 +46,19 @@ const Palette = () => {
             onClick={() => setSelectedColor(SelectedColor.Neutral)}
           >
             <Swatch
-              hex={hsl(
-                neutral.hue,
-                neutral.saturation,
-                neutral.luminance
-              )}
+              hex={hsl(neutral.hue, neutral.saturation, neutral.luminance)}
             />
           </div>
-          {currentAccents.map((color, i) => (
+          {accents.map((color, i) => (
             <div
               key={i}
               className={`${
-                accentIndex == i && selected == SelectedColor.Accents
+                selectedAccent == i && selected == SelectedColor.Accents
                   ? "ring-2"
                   : "ring-0"
               } p-4`}
               onClick={() => {
-                setAccentIndex(i)
-                setSelectedColor(SelectedColor.Accents, i)
+                setSelectedColor(SelectedColor.Accents, i);
               }}
             >
               <Swatch hex={hsl(color.hue, color.saturation, color.luminance)} />
@@ -77,8 +67,11 @@ const Palette = () => {
           <button
             className="w-10 h-10 bg-white rounded-md flex flex-col justify-center items-center"
             onClick={() => {
-              addAccent({ hue: 100, saturation: 100, luminance: 50 });
-              setSelectedColor(SelectedColor.Accents, currentAccents.length - 1)
+              addNewAccent({ hue: 100, saturation: 100, luminance: 50 });
+              setSelectedColor(
+                SelectedColor.Accents,
+                accents.length
+              );
             }}
           >
             <p className="text-xl text-black">+</p>

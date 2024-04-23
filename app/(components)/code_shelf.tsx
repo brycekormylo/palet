@@ -9,7 +9,7 @@ import { dracula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 const CodeShelf = () => {
   var hsl = require("hsl-to-hex");
-  const { accentIndex: index, palette } = useColorContext();
+  const { palette } = useColorContext();
   const [isVisible, setVisible] = useState(false);
 
   const toggleVisible = () => {

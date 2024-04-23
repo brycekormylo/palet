@@ -5,13 +5,7 @@ import { SelectedColor, useColorContext } from "@/contexts/project_context";
 
 const ColorSelector = () => {
   const {
-    palette,
     current,
-    selected,
-    accentIndex,
-    setAccents,
-    setNeutralColor,
-    setPrimaryColor,
     swapSelectedColor,
   } = useColorContext();
 
@@ -65,7 +59,7 @@ const ColorSelector = () => {
                 min={0}
                 max={360}
                 onChange={handleHueChange}
-                onChangeCommitted={swapSelectedColor}
+                onChangeCommitted={() => swapSelectedColor(hsl(hue,saturation,luminance))}
               />
               <p>{hue}</p>
             </div>
@@ -77,7 +71,7 @@ const ColorSelector = () => {
                 min={0}
                 max={100}
                 onChange={handleSaturationChange}
-                onChangeCommitted={swapSelectedColor}
+                onChangeCommitted={() => swapSelectedColor}
               />
               <p>{saturation}</p>
             </div>
@@ -89,7 +83,7 @@ const ColorSelector = () => {
                 min={0}
                 max={100}
                 onChange={handleLuminanceChange}
-                onChangeCommitted={swapSelectedColor}
+                onChangeCommitted={() => swapSelectedColor}
               />
               <p>{luminance}</p>
             </div>

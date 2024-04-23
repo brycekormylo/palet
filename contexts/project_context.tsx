@@ -12,7 +12,7 @@ type ColorHSL = {
 type Palette = {
   primary: ColorHSL;
   neutral: ColorHSL;
-  accents?: ColorHSL[];
+  accents: ColorHSL[];
 };
 
 export enum SelectedColor {
@@ -27,15 +27,15 @@ interface ColorContextProps {
   setPrimaryColor: (color: ColorHSL) => void;
   neutral: ColorHSL;
   setNeutralColor: (color: ColorHSL) => void;
-  addAccent: (color: ColorHSL) => void;
+  accents: ColorHSL[];
+  addNewAccent: (color: ColorHSL) => void;
   setAccents: (colors: ColorHSL[]) => void;
   current: ColorHSL;
-  currentAccents: ColorHSL[];
   selected: SelectedColor;
   setSelectedColor: (selected: SelectedColor, index?: number) => void;
   swapSelectedColor: (color: ColorHSL) => void;
-  accentIndex: number;
-  setAccentIndex: (index: number) => void;
+  selectedAccent: number;
+  setSelectedAccent: (index: number) => void;
 }
 
 const ColorContext = createContext<ColorContextProps | undefined>(undefined);
@@ -45,87 +45,67 @@ interface ColorProviderProps {
 }
 
 const ColorProvider: React.FC<ColorProviderProps> = ({ children }) => {
+  const defaultColor: ColorHSL = { hue: 0, saturation: 100, luminance: 60 };
+
   const [selected, setSelected] = useState<SelectedColor>(
     SelectedColor.Primary
   );
-  const [current, setCurrent] = useState<ColorHSL>({
-    hue: 0,
-    saturation: 100,
-    luminance: 60,
-  });
-  const [primary, setPrimary] = useState<ColorHSL>({
-    hue: 0,
-    saturation: 100,
-    luminance: 60,
-  });
-  const [neutral, setNeutral] = useState<ColorHSL>({
-    hue: 0,
-    saturation: 100,
-    luminance: 60,
-  });
+  const [selectedAccent, setSelectedAccent] = useState<number>(0);
 
-  const [currentAccents, setCurrentAccents] = useState<ColorHSL[]>([]);
-
-  const [accentIndex, setAccentIndex] = useState<number>(0);
+  const [current, setCurrent] = useState<ColorHSL>(defaultColor);
+  const [primary, setPrimary] = useState<ColorHSL>(defaultColor);
+  const [neutral, setNeutral] = useState<ColorHSL>(defaultColor);
+  const [accents, setAccents] = useState<ColorHSL[]>([]);
 
   const [palette, setPalette] = useState<Palette>({
-    primary: { hue: 0, saturation: 100, luminance: 60 },
-    neutral: { hue: 60, saturation: 100, luminance: 60 },
+    primary: defaultColor,
+    neutral: defaultColor,
+    accents: [],
   });
 
   const setPrimaryColor = (color: ColorHSL) => {
+    setPrimary(color);
     const newPalette = palette;
     newPalette.primary = color;
     setPalette(newPalette);
-    setPrimary(palette.primary);
   };
 
   const setNeutralColor = (color: ColorHSL) => {
+    setNeutral(color);
     const newPalette = palette;
     newPalette.neutral = color;
     setPalette(newPalette);
-    setNeutral(palette.neutral);
   };
 
-  const addAccent = (color: ColorHSL) => {
+  const addNewAccent = (color: ColorHSL) => {
+    const newAccents: ColorHSL[] = [...accents];
+    newAccents.push(color);
+    setAccentColors(newAccents);
     const newPalette = palette;
-    if (!newPalette.accents) {
-      newPalette.accents = [];
-    }
-    newPalette.accents.push(color);
+    newPalette.accents = newAccents;
     setPalette(newPalette);
-    setCurrentAccents(palette.accents ?? []);
   };
 
-  const setAccents = (colors: ColorHSL[]) => {
+  const setAccentColors = (colors: ColorHSL[]) => {
+    setAccents(colors);
     const newPalette = palette;
-    if (!newPalette.accents) {
-      newPalette.accents = [];
-    }
     newPalette.accents = colors;
     setPalette(newPalette);
-    setCurrentAccents(newPalette.accents)
   };
 
   const setSelectedColor = (selected: SelectedColor, index?: number) => {
     setSelected(selected);
     switch (selected) {
       case SelectedColor.Primary: {
-        setCurrent(palette.primary);
+        setCurrent(primary);
       }
       case SelectedColor.Neutral: {
-        setCurrent(palette.neutral);
+        setCurrent(neutral);
       }
       case SelectedColor.Accents: {
-        setCurrent(
-          palette.accents?.at(index ?? 0) ?? {
-            hue: 0,
-            saturation: 100,
-            luminance: 60,
-          }
-        );
-        setAccentIndex(index ?? 0);
-        setCurrentAccents(palette.accents ?? []);
+        setCurrent(accents.at(index ?? 0) ?? defaultColor);
+        setSelectedAccent(index ?? 0);
+        setAccentColors(accents);
       }
     }
   };
@@ -133,14 +113,14 @@ const ColorProvider: React.FC<ColorProviderProps> = ({ children }) => {
   const swapSelectedColor = (color: ColorHSL) => {
     switch (selected) {
       case SelectedColor.Primary: {
-        setPrimaryColor(color)
+        setPrimaryColor(color);
       }
       case SelectedColor.Neutral: {
-        setNeutralColor(color)
+        setNeutralColor(color);
       }
       case SelectedColor.Accents: {
-        const newAccents = [...currentAccents]
-        newAccents[accentIndex] = color
+        const newAccents = [...accents];
+        newAccents[selectedAccent] = color;
         setAccents(newAccents);
       }
     }
@@ -154,15 +134,15 @@ const ColorProvider: React.FC<ColorProviderProps> = ({ children }) => {
         setPrimaryColor,
         neutral,
         setNeutralColor,
-        addAccent,
+        addNewAccent,
         setAccents,
-        currentAccents,
+        accents,
         current,
         selected,
         setSelectedColor,
         swapSelectedColor,
-        accentIndex,
-        setAccentIndex,
+        selectedAccent,
+        setSelectedAccent,
       }}
     >
       {children}
