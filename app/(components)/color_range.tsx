@@ -1,17 +1,12 @@
 "use client";
 
-import { Box, Slider } from "@mui/material";
+import { useColorContext } from "@/contexts/project_context";
+import { useEffect, useState } from "react";
 import Swatch from "./swatch";
-import { useState } from "react";
-
-type Color = {
-  hue: number;
-  saturation: number;
-  luminance: number;
-};
 
 const ColorRange = () => {
   const shadeKeys = [
+    "50",
     "100",
     "200",
     "300",
@@ -21,71 +16,66 @@ const ColorRange = () => {
     "700",
     "800",
     "900",
+    "950",
   ];
+  const lums = [96, 90, 84, 76, 62, 50, 38, 24, 16, 10, 4];
+  const lumSaturations = [100, 95, 90, 85, 80, 75, 80, 85, 90, 95, 100];
+  const sats = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+  const hues = [-28, -24, -18, -10, 0, 10, 18, 24, 28];
+  const hueRotations = [-20, -10, 0, 10, 20];
+  const { colors, index } = useColorContext();
+  var hsl = require("hsl-to-hex");
+
   const [hue, setHue] = useState(0);
   const [saturation, setSaturation] = useState(100);
   const [luminance, setLuminance] = useState(60);
 
-  const handleHueChange = (event: Event, newHue: number | number[]) => {
-    setHue(newHue as number);
-  };
-  const handleSaturationChange = (
-    event: Event,
-    newSaturation: number | number[]
-  ) => {
-    setSaturation(newSaturation as number);
-  };
-  const handleLuminanceChange = (
-    event: Event,
-    newLuminance: number | number[]
-  ) => {
-    setLuminance(newLuminance as number);
-  };
+  useEffect(() => {
+    setHue(colors[index].hue);
+    setSaturation(colors[index].saturation);
+    setLuminance(colors[index].luminance);
+  }, [colors, index]);
 
   return (
-    <div className="flex flex-col gap-4">
-      <Box sx={{ width: 300 }}>
-        <div className="flex flex-row gap-4">
-          <p>Hue</p>
-          <Slider
-            aria-label="Hue"
-            value={hue}
-            min={0}
-            max={360}
-            onChange={handleHueChange}
-          />
-        </div>
-        <div className="flex flex-row gap-4">
-          <p>Saturation</p>
-          <Slider
-            aria-label="Saturation"
-            value={saturation}
-            min={0}
-            max={10}
-            onChange={handleSaturationChange}
-          />
-        </div>
-        <div className="flex flex-row gap-4">
-          <p>Luminance</p>
-          <Slider
-            aria-label="Luminance"
-            value={luminance}
-            min={0}
-            max={100}
-            onChange={handleLuminanceChange}
-          />
-        </div>
-      </Box>
+    <div className=" [&_*]:transition-all [&_*]:ease-linear flex flex-col gap-4">
+      <p className="text-xl text-white">Hue Shades</p>
       <div className="flex flex-row gap-2">
-        {shadeKeys.map((shadeKey, index) => (
-          <div key={index} className="flex flex-col items-center">
-            <Swatch
-              color={`hsl(${hue},${index * saturation}%,${
-                luminance / (shadeKeys.length - index)
-              }%)`}
-            ></Swatch>
-            <p className="text-sm">{shadeKey}</p>
-          </div>
+        {lums.map((lum, i) => (
+          <Swatch
+            key={i}
+            hex={hsl(hue, (lumSaturations[i] + saturation) / 2, lum)}
+            shadeKey={shadeKeys[i]}
+          />
+        ))}
+      </div>
+      <p className="text-xl text-white">Hue Shifts</p>
+      <div className="flex flex-row gap-2">
+        {hueRotations.map((hue, i) => (
+          <Swatch
+            key={i}
+            hex={hsl(colors[index].hue + hue, saturation, luminance)}
+            shadeKey={`${hueRotations[i]}`}
+          />
+        ))}
+      </div>
+      <p className="text-xl text-white">Advanced Hue Shifts</p>
+      <div className="flex flex-row gap-2">
+        {hues.map((hue, i) => (
+          <Swatch
+            key={i}
+            hex={hsl(colors[index].hue + hue, saturation, luminance)}
+            shadeKey={`${hues[i]}`}
+          />
+        ))}
+      </div>
+      <p className="text-xl text-white">Saturation Range</p>
+      <div className="flex flex-row gap-2">
+        {sats.map((sat, i) => (
+          <Swatch
+            key={i}
+            hex={hsl(hue, sat, luminance)}
+            shadeKey={`${sats[i]}`}
+          />
         ))}
       </div>
     </div>
