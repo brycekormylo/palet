@@ -1,10 +1,11 @@
 "use client";
 
-import { useColorContext } from "@/contexts/project_context";
+import { useColorContext, SelectedColor } from "@/contexts/project_context";
 import { useEffect, useState } from "react";
 import Swatch from "./swatch";
 
 const ColorRange = () => {
+  const { selected, palette, accentIndex, current } = useColorContext();
   const shadeKeys = [
     "50",
     "100",
@@ -23,7 +24,6 @@ const ColorRange = () => {
   const sats = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
   const hues = [-28, -24, -18, -10, 0, 10, 18, 24, 28];
   const hueRotations = [-20, -10, 0, 10, 20];
-  const { colors, index } = useColorContext();
   var hsl = require("hsl-to-hex");
 
   const [hue, setHue] = useState(0);
@@ -31,10 +31,29 @@ const ColorRange = () => {
   const [luminance, setLuminance] = useState(60);
 
   useEffect(() => {
-    setHue(colors[index].hue);
-    setSaturation(colors[index].saturation);
-    setLuminance(colors[index].luminance);
-  }, [colors, index]);
+    setHue(current.hue)
+    setSaturation(current.saturation)
+    setLuminance(current.luminance)
+
+    // switch (selected) {
+    //   case SelectedColor.Primary: {
+    //     setHue(palette.primary.hue);
+    //     setSaturation(palette.primary.saturation);
+    //     setLuminance(palette.primary.luminance);
+    //   }
+    //   case SelectedColor.Neutral: {
+    //     setHue(palette.neutral.hue);
+    //     setSaturation(palette.neutral.saturation);
+    //     setLuminance(palette.neutral.luminance);
+    //   }
+    //   case SelectedColor.Accents: {
+    //     setHue(palette.accents?.at(accentIndex)?.hue ?? 0);
+    //     setSaturation(palette.accents?.at(accentIndex)?.saturation ?? 0);
+    //     setLuminance(palette.accents?.at(accentIndex)?.luminance ?? 0);
+    //   }
+      
+    // }
+  }, [current]);
 
   return (
     <div className=" [&_*]:transition-all [&_*]:ease-linear flex flex-col gap-4">
@@ -53,7 +72,7 @@ const ColorRange = () => {
         {hueRotations.map((hue, i) => (
           <Swatch
             key={i}
-            hex={hsl(colors[index].hue + hue, saturation, luminance)}
+            hex={hsl(current.hue + hue, saturation, luminance)}
             shadeKey={`${hueRotations[i]}`}
           />
         ))}
@@ -63,7 +82,7 @@ const ColorRange = () => {
         {hues.map((hue, i) => (
           <Swatch
             key={i}
-            hex={hsl(colors[index].hue + hue, saturation, luminance)}
+            hex={hsl(current.hue + hue, saturation, luminance)}
             shadeKey={`${hues[i]}`}
           />
         ))}

@@ -7,36 +7,78 @@ import ColorSelector from "../(components)/color_selector";
 import ColorRange from "../(components)/color_range";
 import DemoUI from "../(components)/demo_ui";
 
-const Palette = () => {
-  const { colors, setNewColors, index, setIndex } = useColorContext();
-  var hsl = require("hsl-to-hex");
+enum SelectedColor {
+  Primary,
+  Neutral,
+  Accents,
+}
 
-  const addNewColor = () => {
-    const newColors = [...colors];
-    const defaultColor = { hue: 100, saturation: 100, luminance: 50 };
-    newColors.push(defaultColor);
-    console.log(newColors);
-    setNewColors(newColors);
-  };
+const Palette = () => {
+  const {
+    palette,
+    accentIndex,
+    setAccentIndex,
+    selected,
+    setSelectedColor,
+    addAccent,
+    currentAccents
+  } = useColorContext();
+  var hsl = require("hsl-to-hex");
 
   return (
     <div className="flex flex-row gap-10">
       <div className="flex flex-col">
         <div className="flex flex-row items-center gap-4">
-          {colors.map((color, i) => (
+          <div
+            className={`${
+              selected == SelectedColor.Primary ? "ring-2" : "ring-0"
+            } p-4`}
+            onClick={() => setSelectedColor(SelectedColor.Primary)}
+          >
+            <Swatch
+              hex={hsl(
+                palette.primary.hue,
+                palette.primary.saturation,
+                palette.primary.luminance
+              )}
+            />
+          </div>
+          <div
+            className={`${
+              selected == SelectedColor.Neutral ? "ring-2" : "ring-0"
+            } p-4`}
+            onClick={() => setSelectedColor(SelectedColor.Neutral)}
+          >
+            <Swatch
+              hex={hsl(
+                palette.neutral.hue,
+                palette.neutral.saturation,
+                palette.neutral.luminance
+              )}
+            />
+          </div>
+          {currentAccents.map((color, i) => (
             <div
               key={i}
-              className={`${index == i ? "ring-2" : "ring-0"} p-4`}
-              onClick={() => setIndex(i)}
+              className={`${
+                accentIndex == i && selected == SelectedColor.Accents
+                  ? "ring-2"
+                  : "ring-0"
+              } p-4`}
+              onClick={() => {
+                setAccentIndex(i)
+                setSelectedColor(SelectedColor.Accents, i)
+              }}
             >
-              <Swatch
-                hex={hsl(color.hue, color.saturation, color.luminance)}
-              />
+              <Swatch hex={hsl(color.hue, color.saturation, color.luminance)} />
             </div>
           ))}
           <button
             className="w-10 h-10 bg-white rounded-md flex flex-col justify-center items-center"
-            onClick={addNewColor}
+            onClick={() => {
+              addAccent({ hue: 100, saturation: 100, luminance: 50 });
+              setSelectedColor(SelectedColor.Accents, currentAccents.length - 1)
+            }}
           >
             <p className="text-xl text-black">+</p>
           </button>

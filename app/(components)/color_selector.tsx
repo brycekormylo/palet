@@ -1,25 +1,45 @@
 import { Slider } from "@mui/material";
 import { useState, useEffect } from "react";
 import Swatch from "./swatch";
-import { useColorContext } from "@/contexts/project_context";
+import { SelectedColor, useColorContext } from "@/contexts/project_context";
 
 const ColorSelector = () => {
-  const { colors, setNewColors, index, setIndex } = useColorContext();
+  const {
+    palette,
+    current,
+    selected,
+    accentIndex,
+    setAccentIndex,
+    addAccent,
+    setAccents,
+    setNeutral,
+    setPrimary,
+  } = useColorContext();
 
   useEffect(() => {
-    setHue(colors[index].hue);
-    setSaturation(colors[index].saturation);
-    setLuminance(colors[index].luminance);
-  }, [colors, index]);
+    setHue(current.hue);
+    setSaturation(current.saturation);
+    setLuminance(current.luminance);
+  }, [current]);
 
   const swapSelectedColor = () => {
-    const newColors = [...colors];
-    newColors[index] = {
-      hue: hue,
-      saturation: saturation,
-      luminance: luminance,
-    };
-    setNewColors(newColors);
+    switch (selected) {
+      case SelectedColor.Primary: {
+        setPrimary({ hue: hue, saturation: saturation, luminance: luminance });
+      }
+      case SelectedColor.Neutral: {
+        setNeutral({ hue: hue, saturation: saturation, luminance: luminance });
+      }
+      case SelectedColor.Accents: {
+        const newAccents = [...(palette.accents ?? [])];
+        newAccents[accentIndex] = {
+          hue: hue,
+          saturation: saturation,
+          luminance: luminance,
+        };
+        setAccents(newAccents);
+      }
+    }
   };
 
   const shadeKeys = [
@@ -109,7 +129,9 @@ const ColorSelector = () => {
         </div>
         <div className="flex flex-col justify-center items-center gap-1 p-2 pe-4">
           <p className="text-sm">{`hsl(${hue},${saturation}%,${luminance}%)`}</p>
-          <p className="text-sm">{hsl(hue, saturation, luminance).toUpperCase()}</p>
+          <p className="text-sm">
+            {hsl(hue, saturation, luminance).toUpperCase()}
+          </p>
         </div>
       </div>
     </div>

@@ -1,8 +1,7 @@
 import { useColorContext } from "@/contexts/project_context";
-import { hslToRgb } from "@mui/material";
 
 const DemoUI = () => {
-  const { colors, index } = useColorContext();
+  const { current } = useColorContext();
   var hsl = require("hsl-to-hex");
 
   return (
@@ -10,7 +9,7 @@ const DemoUI = () => {
       <div
         className="w-20 h-10 flex justify-center items-center"
         style={{
-          background: hsl(colors[index].hue, colors[index].saturation, colors[index].luminance)
+          background: hsl(current.hue, current.saturation, current.luminance),
         }}
       >
         <p className="text-lg text-white">Click me</p>
@@ -18,7 +17,7 @@ const DemoUI = () => {
       <div
         className="w-20 h-10 flex justify-center items-center"
         style={{
-          background: hsl(colors[index].hue, colors[index].saturation, colors[index].luminance)
+          background: hsl(current.hue, current.saturation, current.luminance),
         }}
       >
         <p className="text-lg text-black">Click me</p>

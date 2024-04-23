@@ -5,10 +5,11 @@ import { useState } from "react";
 import { LuCode2 } from "react-icons/lu";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 const CodeShelf = () => {
   var hsl = require("hsl-to-hex");
-  const { colors, index } = useColorContext();
+  const { accentIndex: index, palette } = useColorContext();
   const [isVisible, setVisible] = useState(false);
 
   const toggleVisible = () => {
@@ -49,17 +50,17 @@ const CodeShelf = () => {
         colors: {
           'primary': {
             default: '${hsl(
-              colors[index].hue,
-              colors[index].saturation,
-              colors[index].luminance
+              palette.primary.hue,
+              palette.primary.saturation,
+              palette.primary.luminance
             )}',
             ${shadeKeys
               .map(
                 (value, i) =>
                   `'${value}': '${hsl(
-                    colors[index].hue,
-                    (colors[index].saturation + lumSaturations[i]) / 2,
-                    colors[index].luminance
+                    palette.primary.hue,
+                    (palette.primary.saturation + lumSaturations[i]) / 2,
+                    palette.primary.luminance
                   ).toUpperCase()}'`
               )
               .join(",\n            ")}
@@ -67,9 +68,9 @@ const CodeShelf = () => {
               .map(
                 (value, i) =>
                   `'${value[0]}': '${hsl(
-                    colors[index].hue + value[1],
-                    colors[index].saturation,
-                    colors[index].luminance
+                    palette.primary.hue + value[1],
+                    palette.primary.saturation,
+                    palette.primary.luminance
                   ).toUpperCase()}'`
               )
               .join(",\n            ")}
@@ -86,16 +87,26 @@ const CodeShelf = () => {
       </div>
       <div
         className={`${
-          isVisible ? "w-[32rem]" : "w-0"
-        } bg-gray-900 h-screen flex flex-col gap-0`}
+          isVisible ? "w-auto" : "w-0"
+        } h-screen flex flex-col gap-0`}
         style={{
-          background: hsl(colors[index].hue, colors[index].saturation, 10),
+          background: hsl(palette.primary.hue, palette.primary.saturation, 10),
         }}
       >
         <SyntaxHighlighter
           language="javascript"
-          style={docco}
+          style={dracula}
           showLineNumbers={true}
+          customStyle={{
+            lineHeight: "1",
+            fontSize: "1em",
+          }}
+          codeTagProps={{
+            style: {
+              lineHeight: "inherit",
+              fontSize: "inherit",
+            },
+          }}
         >
           {codeString}
         </SyntaxHighlighter>
