@@ -15,7 +15,8 @@ enum SelectedColor {
 
 const Palette = () => {
   const {
-    palette,
+    primary,
+    neutral,
     accentIndex,
     setAccentIndex,
     selected,
@@ -37,9 +38,9 @@ const Palette = () => {
           >
             <Swatch
               hex={hsl(
-                palette.primary.hue,
-                palette.primary.saturation,
-                palette.primary.luminance
+                primary.hue,
+                primary.saturation,
+                primary.luminance
               )}
             />
           </div>
@@ -51,9 +52,9 @@ const Palette = () => {
           >
             <Swatch
               hex={hsl(
-                palette.neutral.hue,
-                palette.neutral.saturation,
-                palette.neutral.luminance
+                neutral.hue,
+                neutral.saturation,
+                neutral.luminance
               )}
             />
           </div>

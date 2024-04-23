@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Swatch from "./swatch";
 
 const ColorRange = () => {
-  const { selected, palette, accentIndex, current } = useColorContext();
+  const { current } = useColorContext();
   const shadeKeys = [
     "50",
     "100",
@@ -34,25 +34,6 @@ const ColorRange = () => {
     setHue(current.hue)
     setSaturation(current.saturation)
     setLuminance(current.luminance)
-
-    // switch (selected) {
-    //   case SelectedColor.Primary: {
-    //     setHue(palette.primary.hue);
-    //     setSaturation(palette.primary.saturation);
-    //     setLuminance(palette.primary.luminance);
-    //   }
-    //   case SelectedColor.Neutral: {
-    //     setHue(palette.neutral.hue);
-    //     setSaturation(palette.neutral.saturation);
-    //     setLuminance(palette.neutral.luminance);
-    //   }
-    //   case SelectedColor.Accents: {
-    //     setHue(palette.accents?.at(accentIndex)?.hue ?? 0);
-    //     setSaturation(palette.accents?.at(accentIndex)?.saturation ?? 0);
-    //     setLuminance(palette.accents?.at(accentIndex)?.luminance ?? 0);
-    //   }
-      
-    // }
   }, [current]);
 
   return (

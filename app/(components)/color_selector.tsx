@@ -9,11 +9,10 @@ const ColorSelector = () => {
     current,
     selected,
     accentIndex,
-    setAccentIndex,
-    addAccent,
     setAccents,
-    setNeutral,
-    setPrimary,
+    setNeutralColor,
+    setPrimaryColor,
+    swapSelectedColor,
   } = useColorContext();
 
   useEffect(() => {
@@ -22,37 +21,6 @@ const ColorSelector = () => {
     setLuminance(current.luminance);
   }, [current]);
 
-  const swapSelectedColor = () => {
-    switch (selected) {
-      case SelectedColor.Primary: {
-        setPrimary({ hue: hue, saturation: saturation, luminance: luminance });
-      }
-      case SelectedColor.Neutral: {
-        setNeutral({ hue: hue, saturation: saturation, luminance: luminance });
-      }
-      case SelectedColor.Accents: {
-        const newAccents = [...(palette.accents ?? [])];
-        newAccents[accentIndex] = {
-          hue: hue,
-          saturation: saturation,
-          luminance: luminance,
-        };
-        setAccents(newAccents);
-      }
-    }
-  };
-
-  const shadeKeys = [
-    "100",
-    "200",
-    "300",
-    "400",
-    "500",
-    "600",
-    "700",
-    "800",
-    "900",
-  ];
   const [hue, setHue] = useState(0);
   const [saturation, setSaturation] = useState(100);
   const [luminance, setLuminance] = useState(60);
