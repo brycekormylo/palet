@@ -1,13 +1,10 @@
 import { Slider } from "@mui/material";
 import { useState, useEffect } from "react";
 import Swatch from "./swatch";
-import { SelectedColor, useColorContext } from "@/contexts/project_context";
+import { useColorContext } from "@/contexts/project_context";
 
 const ColorSelector = () => {
-  const {
-    current,
-    swapSelectedColor,
-  } = useColorContext();
+  const { current, swapSelectedColor } = useColorContext();
 
   useEffect(() => {
     setHue(current.hue);
@@ -35,6 +32,12 @@ const ColorSelector = () => {
   ) => {
     setLuminance(newLuminance as number);
   };
+  const handleSubmitChange = () =>
+    swapSelectedColor({
+      hue: hue,
+      saturation: saturation,
+      luminance: luminance,
+    });
 
   return (
     <div className="flex flex-row gap-4 py-4">
@@ -59,7 +62,7 @@ const ColorSelector = () => {
                 min={0}
                 max={360}
                 onChange={handleHueChange}
-                onChangeCommitted={() => swapSelectedColor(hsl(hue,saturation,luminance))}
+                onChangeCommitted={handleSubmitChange}
               />
               <p>{hue}</p>
             </div>
@@ -71,7 +74,7 @@ const ColorSelector = () => {
                 min={0}
                 max={100}
                 onChange={handleSaturationChange}
-                onChangeCommitted={() => swapSelectedColor}
+                onChangeCommitted={handleSubmitChange}
               />
               <p>{saturation}</p>
             </div>
@@ -83,7 +86,7 @@ const ColorSelector = () => {
                 min={0}
                 max={100}
                 onChange={handleLuminanceChange}
-                onChangeCommitted={() => swapSelectedColor}
+                onChangeCommitted={handleSubmitChange}
               />
               <p>{luminance}</p>
             </div>

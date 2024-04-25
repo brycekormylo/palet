@@ -1,6 +1,6 @@
 "use client";
 
-import { useColorContext, SelectedColor } from "@/contexts/project_context";
+import { useColorContext } from "@/contexts/project_context";
 import { useEffect, useState } from "react";
 import Swatch from "./swatch";
 
@@ -31,9 +31,9 @@ const ColorRange = () => {
   const [luminance, setLuminance] = useState(60);
 
   useEffect(() => {
-    setHue(current.hue)
-    setSaturation(current.saturation)
-    setLuminance(current.luminance)
+    setHue(current.hue);
+    setSaturation(current.saturation);
+    setLuminance(current.luminance);
   }, [current]);
 
   return (

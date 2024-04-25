@@ -7,18 +7,11 @@ import ColorSelector from "../(components)/color_selector";
 import ColorRange from "../(components)/color_range";
 import DemoUI from "../(components)/demo_ui";
 
-enum SelectedColor {
-  Primary,
-  Neutral,
-  Accents,
-}
-
 const Palette = () => {
   const {
     primary,
     neutral,
-    selectedAccent,
-    selected,
+    selectedIndex,
     setSelectedColor,
     addNewAccent,
     accents,
@@ -30,20 +23,16 @@ const Palette = () => {
       <div className="flex flex-col">
         <div className="flex flex-row items-center gap-4">
           <div
-            className={`${
-              selected == SelectedColor.Primary ? "ring-2" : "ring-0"
-            } p-4`}
-            onClick={() => setSelectedColor(SelectedColor.Primary)}
+            className={`${selectedIndex == 0 ? "ring-2" : "ring-0"} p-4`}
+            onClick={() => setSelectedColor(0)}
           >
             <Swatch
               hex={hsl(primary.hue, primary.saturation, primary.luminance)}
             />
           </div>
           <div
-            className={`${
-              selected == SelectedColor.Neutral ? "ring-2" : "ring-0"
-            } p-4`}
-            onClick={() => setSelectedColor(SelectedColor.Neutral)}
+            className={`${selectedIndex == 1 ? "ring-2" : "ring-0"} p-4`}
+            onClick={() => setSelectedColor(1)}
           >
             <Swatch
               hex={hsl(neutral.hue, neutral.saturation, neutral.luminance)}
@@ -53,12 +42,12 @@ const Palette = () => {
             <div
               key={i}
               className={`${
-                selectedAccent == i && selected == SelectedColor.Accents
+                selectedIndex == i
                   ? "ring-2"
                   : "ring-0"
               } p-4`}
               onClick={() => {
-                setSelectedColor(SelectedColor.Accents, i);
+                setSelectedColor(i + 2);
               }}
             >
               <Swatch hex={hsl(color.hue, color.saturation, color.luminance)} />
@@ -68,10 +57,7 @@ const Palette = () => {
             className="w-10 h-10 bg-white rounded-md flex flex-col justify-center items-center"
             onClick={() => {
               addNewAccent({ hue: 100, saturation: 100, luminance: 50 });
-              setSelectedColor(
-                SelectedColor.Accents,
-                accents.length
-              );
+              setSelectedColor(2);
             }}
           >
             <p className="text-xl text-black">+</p>
