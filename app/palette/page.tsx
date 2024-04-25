@@ -11,10 +11,10 @@ const Palette = () => {
   const {
     primary,
     neutral,
-    selectedIndex,
-    setSelectedColor,
-    addNewAccent,
     accents,
+    createNewAccent,
+    selectedIndex,
+    changeSelection,
   } = useColorContext();
   var hsl = require("hsl-to-hex");
 
@@ -24,7 +24,7 @@ const Palette = () => {
         <div className="flex flex-row items-center gap-4">
           <div
             className={`${selectedIndex == 0 ? "ring-2" : "ring-0"} p-4`}
-            onClick={() => setSelectedColor(0)}
+            onClick={() => changeSelection(0)}
           >
             <Swatch
               hex={hsl(primary.hue, primary.saturation, primary.luminance)}
@@ -32,7 +32,7 @@ const Palette = () => {
           </div>
           <div
             className={`${selectedIndex == 1 ? "ring-2" : "ring-0"} p-4`}
-            onClick={() => setSelectedColor(1)}
+            onClick={() => changeSelection(1)}
           >
             <Swatch
               hex={hsl(neutral.hue, neutral.saturation, neutral.luminance)}
@@ -41,13 +41,9 @@ const Palette = () => {
           {accents.map((color, i) => (
             <div
               key={i}
-              className={`${
-                selectedIndex == i
-                  ? "ring-2"
-                  : "ring-0"
-              } p-4`}
+              className={`${selectedIndex == i ? "ring-2" : "ring-0"} p-4`}
               onClick={() => {
-                setSelectedColor(i + 2);
+                changeSelection(i + 2);
               }}
             >
               <Swatch hex={hsl(color.hue, color.saturation, color.luminance)} />
@@ -56,8 +52,8 @@ const Palette = () => {
           <button
             className="w-10 h-10 bg-white rounded-md flex flex-col justify-center items-center"
             onClick={() => {
-              addNewAccent({ hue: 100, saturation: 100, luminance: 50 });
-              setSelectedColor(2);
+              createNewAccent();
+              changeSelection(2);
             }}
           >
             <p className="text-xl text-black">+</p>

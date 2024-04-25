@@ -11,17 +11,13 @@ type ColorHSL = {
 
 interface ColorContextProps {
   primary: ColorHSL;
-  setPrimaryColor: (color: ColorHSL) => void;
   neutral: ColorHSL;
-  setNeutralColor: (color: ColorHSL) => void;
   accents: ColorHSL[];
-  addNewAccent: (color: ColorHSL) => void;
-  setAccents: (colors: ColorHSL[]) => void;
+  createNewAccent: () => void;
   current: ColorHSL;
-  setSelectedColor: (index: number) => void;
-  swapSelectedColor: (color: ColorHSL) => void;
   selectedIndex: number;
-  setSelectedIndex: (index: number) => void;
+  changeSelection: (index: number) => void;
+  swapSelectedColor: (color: ColorHSL) => void;
 }
 
 const ColorContext = createContext<ColorContextProps | undefined>(undefined);
@@ -34,34 +30,17 @@ const ColorProvider: React.FC<ColorProviderProps> = ({ children }) => {
   const defaultColor: ColorHSL = { hue: 0, saturation: 100, luminance: 60 };
 
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
-
   const [current, setCurrent] = useState<ColorHSL>(defaultColor);
+
   const [primary, setPrimary] = useState<ColorHSL>(defaultColor);
   const [neutral, setNeutral] = useState<ColorHSL>(defaultColor);
   const [accents, setAccents] = useState<ColorHSL[]>([]);
 
-  const setPrimaryColor = (color: ColorHSL) => {
-    setPrimary(color);
-    setCurrent(primary);
-  };
+  const createNewAccent = () => {
+    accents.push(defaultColor);
+  }
 
-  const setNeutralColor = (color: ColorHSL) => {
-    setNeutral(color);
-    setCurrent(neutral);
-  };
-
-  const addNewAccent = (color: ColorHSL) => {
-    const newAccents: ColorHSL[] = [...accents];
-    newAccents.push(color);
-    setAccentColors(newAccents);
-    setCurrent(accents[selectedIndex - 2]);
-  };
-
-  const setAccentColors = (colors: ColorHSL[]) => {
-    setAccents(colors);
-  };
-
-  const setSelectedColor = (index: number) => {
+  const changeSelection = (index: number) => {
     setSelectedIndex(index);
     switch (selectedIndex) {
       case 0: {
@@ -71,7 +50,7 @@ const ColorProvider: React.FC<ColorProviderProps> = ({ children }) => {
         setCurrent(neutral);
       }
       default: {
-        setCurrent(accents[index - 2]);
+        setCurrent(accents[index - 2] ?? defaultColor);
       }
     }
   };
@@ -79,10 +58,10 @@ const ColorProvider: React.FC<ColorProviderProps> = ({ children }) => {
   const swapSelectedColor = (color: ColorHSL) => {
     switch (selectedIndex) {
       case 0: {
-        setPrimaryColor(color);
+        setPrimary(color);
       }
       case 1: {
-        setNeutralColor(color);
+        setNeutral(color);
       }
       default: {
         const newAccents = [...accents];
@@ -96,17 +75,13 @@ const ColorProvider: React.FC<ColorProviderProps> = ({ children }) => {
     <ColorContext.Provider
       value={{
         primary,
-        setPrimaryColor,
         neutral,
-        setNeutralColor,
-        addNewAccent,
-        setAccents,
         accents,
+        createNewAccent,
         current,
-        setSelectedColor,
-        swapSelectedColor,
         selectedIndex,
-        setSelectedIndex,
+        changeSelection,
+        swapSelectedColor,
       }}
     >
       {children}
