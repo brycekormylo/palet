@@ -1,6 +1,5 @@
 import { Slider } from "@mui/material";
 import { useState, useEffect } from "react";
-import Swatch from "./swatch";
 import { useColorContext } from "@/contexts/project_context";
 
 const ColorSelector = () => {

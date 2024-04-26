@@ -43,7 +43,7 @@ const ColorRange = () => {
         {lums.map((lum, i) => (
           <Swatch
             key={i}
-            hex={hsl(hue, (lumSaturations[i] + saturation) / 2, lum)}
+            hex={hsl(hue, (lumSaturations[i] + saturation) / 2, (lum - 50) + luminance)}
             shadeKey={shadeKeys[i]}
           />
         ))}

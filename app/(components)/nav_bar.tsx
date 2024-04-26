@@ -5,7 +5,7 @@ const NavBar = () => {
   var hsl = require("hsl-to-hex");
   return (
     <div
-      className="flex flex-row w-full overflow-hidden justify-end items-center h-6 px-10"
+      className="flex flex-row w-full overflow-hidden justify-end items-center h-12 px-10"
       style={{
         background: hsl(
           primary.hue,

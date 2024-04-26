@@ -18,6 +18,8 @@ const Palette = () => {
   } = useColorContext();
   var hsl = require("hsl-to-hex");
 
+  useEffect(() => {}, [accents])
+
   return (
     <div className="flex flex-row gap-10">
       <div className="flex flex-col">
@@ -41,7 +43,7 @@ const Palette = () => {
           {accents.map((color, i) => (
             <div
               key={i}
-              className={`${selectedIndex == i ? "ring-2" : "ring-0"} p-4`}
+              className={`${selectedIndex - 2 == i ? "ring-2" : "ring-0"} p-4`}
               onClick={() => {
                 changeSelection(i + 2);
               }}
@@ -53,7 +55,7 @@ const Palette = () => {
             className="w-10 h-10 bg-white rounded-md flex flex-col justify-center items-center"
             onClick={() => {
               createNewAccent();
-              changeSelection(2);
+              changeSelection(accents.length + 2);
             }}
           >
             <p className="text-xl text-black">+</p>
@@ -62,7 +64,6 @@ const Palette = () => {
         <ColorSelector />
         <ColorRange />
       </div>
-      <DemoUI />
     </div>
   );
 };

@@ -4,13 +4,11 @@ import { useColorContext } from "@/contexts/project_context";
 import { useState } from "react";
 import { LuCode2 } from "react-icons/lu";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/hljs";
-
 
 const CodeShelf = () => {
   var hsl = require("hsl-to-hex");
-  const { primary } = useColorContext();
+  const { primary, neutral, accents } = useColorContext();
   const [isVisible, setVisible] = useState(false);
 
   const toggleVisible = () => {
@@ -37,7 +35,7 @@ const CodeShelf = () => {
     ["L3", -24],
     ["L2", -18],
     ["L1", -10],
-    ["N", 0], 
+    ["N", 0],
     ["R1", 10],
     ["R2", 18],
     ["R3", 24],
@@ -72,6 +70,33 @@ const CodeShelf = () => {
                     primary.hue + value[1],
                     primary.saturation,
                     primary.luminance
+                  ).toUpperCase()}'`
+              )
+              .join(",\n            ")}
+          },
+          'neutral': {
+            default: '${hsl(
+              neutral.hue,
+              neutral.saturation,
+              neutral.luminance
+            )}',
+            ${shadeKeys
+              .map(
+                (value, i) =>
+                  `'${value}': '${hsl(
+                    neutral.hue,
+                    (neutral.saturation + lumSaturations[i]) / 2,
+                    neutral.luminance
+                  ).toUpperCase()}'`
+              )
+              .join(",\n            ")}
+            ${hues
+              .map(
+                (value, i) =>
+                  `'${value[0]}': '${hsl(
+                    neutral.hue + value[1],
+                    neutral.saturation,
+                    neutral.luminance
                   ).toUpperCase()}'`
               )
               .join(",\n            ")}
