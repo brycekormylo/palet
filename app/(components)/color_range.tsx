@@ -38,16 +38,6 @@ const ColorRange = () => {
 
   return (
     <div className=" [&_*]:transition-all [&_*]:ease-linear flex flex-col gap-4">
-      <p className="text-xl text-white">Hue Shades</p>
-      <div className="flex flex-row gap-2">
-        {lums.map((lum, i) => (
-          <Swatch
-            key={i}
-            hex={hsl(hue, (lumSaturations[i] + saturation) / 2, (lum - 50) + luminance)}
-            shadeKey={shadeKeys[i]}
-          />
-        ))}
-      </div>
       <p className="text-xl text-white">Hue Shifts</p>
       <div className="flex flex-row gap-2">
         {hueRotations.map((hue, i) => (
@@ -65,6 +55,20 @@ const ColorRange = () => {
             key={i}
             hex={hsl(current.hue + hue, saturation, luminance)}
             shadeKey={`${hues[i]}`}
+          />
+        ))}
+      </div>
+      <p className="text-xl text-white">Hue Shades</p>
+      <div className="flex flex-row gap-2">
+        {lums.map((lum, i) => (
+          <Swatch
+            key={i}
+            hex={hsl(
+              hue,
+              (lumSaturations[i] + saturation) / 2,
+              lum - 50 + luminance
+            )}
+            shadeKey={shadeKeys[i]}
           />
         ))}
       </div>

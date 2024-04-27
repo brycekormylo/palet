@@ -19,7 +19,7 @@ const Swatch = (props: SwatchProps) => {
   return (
     <div className="flex flex-col [&_*]:transition-all [&_*]:ease-linear">
       <div
-        className={`z-10 h-20 w-20 rounded-md flex justify-center items-center`}
+        className={`z-10 h-20 w-20 rounded-lg flex justify-center items-center`}
         style={{
           background: `${props.hex}`,
         }}

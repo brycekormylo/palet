@@ -25,9 +25,7 @@ export default function Home() {
           background: hsl(neutral.hue, neutral.saturation, neutral.luminance),
         }}
       >
-        <div className="p-4">
-          <Palette />
-        </div>
+        <Palette />
       </div>
     </main>
   );
