@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
     <main
-      className="flex items-end justify-end max-w-screen"
+      className="flex items-end justify-end max-w-screen overflow-clip"
       style={{
         background: hsl(primary.hue, primary.saturation, primary.luminance),
       }}

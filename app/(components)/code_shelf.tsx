@@ -10,6 +10,8 @@ const CodeShelf = () => {
   var hsl = require("hsl-to-hex");
   const { primary, neutral, accents } = useColorContext();
   const [isVisible, setVisible] = useState(false);
+  const [isHovered, setHovered] = useState(false);
+  const [showButtonText, setShowButtonText] = useState(false);
 
   const toggleVisible = () => {
     setVisible(!isVisible);
@@ -106,25 +108,43 @@ const CodeShelf = () => {
     },
   `;
 
+  const handleMouseEnter = async () => {
+    setHovered(true);
+    await delay(200);
+    setShowButtonText(true);
+  };
+
+  const handleMouseLeave = () => {
+    setHovered(false);
+    setShowButtonText(false);
+  };
+
+  function delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
   return (
     <div className="[&_*]:transition-all [&_*]:ease-linear h-screen flex flex-row items-start justify-center">
-      <div className="p-4" onClick={toggleVisible}>
-        <LuCode2 size={24} />
-      </div>
       <div
-        className={`${
-          isVisible ? "w-auto" : "w-0"
-        } h-screen flex flex-col gap-0`}
+        className={`h-12 flex flex-row-reverse px-[0.6rem] justify-between items-center mt-8 me-2 border-[2px] shadow-md shadow-slate-800 border-white/50 rounded-full ${isHovered ? "scale-[1.02] w-[8rem]" : "scale-[1.0] w-12"}`}
+        onClick={toggleVisible}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         style={{
-          background: hsl(primary.hue, primary.saturation, 10),
+          background: hsl(primary.hue, primary.saturation, primary.luminance),
         }}
       >
+        <LuCode2 size={28} />
+        <p className={`${showButtonText ? "opacity-100 block" : "opacity-0 hidden"} text-sm ps-1`}>{isVisible ? "Hide code" : "Show code"}</p>
+      </div>
+      <div className={`${isVisible ? "w-[20em]" : "w-0"} bg-black shadow-xl shadow-slate-800/25 border-2 border-white/15 rounded-tl-xl rounded-bl-xl my-4 ms-4`}>
         <SyntaxHighlighter
           language="javascript"
           style={dracula}
           customStyle={{
-            lineHeight: "1",
+            lineHeight: "1.2",
             fontSize: "0.8em",
+            background: "clear",
           }}
           codeTagProps={{
             style: {
